@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Movie Dashboard</title>
+  </head>
+  <body>
+    <h1>Movie Dashboard</h1>
+    <form method="GET">
+      {% csrf_token %}
+      <input
+        type="text"
+        name="movie_title"
+        placeholder="Enter movie title"
+        required
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    {% if movie_data and movie_data.results %}
+    <h2>Results for "{{ query }}"</h2>
+    {% for movie in movie_data.results %}
+    <div style="border: 1px solid #ddd; margin: 10px; padding: 10px">
+      <h3>{{ movie.title }} ({{ movie.release_date|slice:":4" }})</h3>
+      {% if movie.poster_path %}
+      <img
+        src="https://image.tmdb.org/t/p/w200{{ movie.poster_path }}"
+        alt="{{ movie.title }} Poster"
+      />
+      {% endif %}
+      <p><strong>Overview:</strong> {{ movie.overview }}</p>
+      <p><strong>Rating:</strong> {{ movie.vote_average }}/10</p>
+      <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+    </div>
+    {% endfor %} {% else %}
+    <p>Enter a movie title to get details.</p>
+    {% endif %}
+  </body>
+</html>
